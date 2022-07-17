@@ -1,4 +1,4 @@
-package com.example.async.service.serviceImpl;
+package com.example.async.service.Impl;
 
 import com.example.async.model.User;
 import com.example.async.service.AsyncService;

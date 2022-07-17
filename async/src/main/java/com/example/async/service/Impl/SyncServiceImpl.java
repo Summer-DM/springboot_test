@@ -1,4 +1,4 @@
-package com.example.async.service.serviceImpl;
+package com.example.async.service.Impl;
 
 import com.example.async.config.Task;
 import com.example.async.service.SyncService;
