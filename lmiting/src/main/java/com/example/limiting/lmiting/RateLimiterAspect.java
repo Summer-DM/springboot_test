@@ -1,6 +1,8 @@
 package com.example.limiting.lmiting;
 
 import com.example.limiting.lmiting.config.ServiceException;
+import com.example.limiting.lmiting.model.LimitType;
+import com.example.limiting.lmiting.model.RateLimiter;
 import com.example.limiting.lmiting.utils.IpUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;

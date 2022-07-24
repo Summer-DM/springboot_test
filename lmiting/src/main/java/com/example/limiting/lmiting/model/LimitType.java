@@ -1,4 +1,4 @@
-package com.example.limiting.lmiting;
+package com.example.limiting.lmiting.model;
 
 /**
  * @ClassName LimitType
