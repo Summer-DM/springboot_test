@@ -1,11 +1,14 @@
 package com.example.datehandling;
 
+import com.example.datehandling.utils.DateUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
+import java.util.Date;
 
 @SpringBootTest
 class DateHandlingApplicationTests {
@@ -124,12 +127,142 @@ class DateHandlingApplicationTests {
         String str1="2022-07-05 12:24:12";
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime parse = LocalDateTime.parse(str1, dtf);
-        System.out.println(parse);
+        System.out.println("将字符串格式化成LocalDateTime："+parse);
 
         String dayAfterTommorrow = "20180210";
         LocalDate formatted = LocalDate.parse(dayAfterTommorrow, DateTimeFormatter.BASIC_ISO_DATE);
-        System.out.printf("Date generated from String %s is %s %n", dayAfterTommorrow, formatted);
+        System.out.printf("将yyyyMMdd格式化成yyyy-MM-dd：", dayAfterTommorrow, formatted);
 
     }
+
+    @Test
+    public void getSpecifiedDate() {
+        // 指定日期 2022-02-09
+        LocalDate localDate = LocalDate.of(2022, 2, 9);
+        // 这个月的第一天 2022-02-01
+        localDate.with(TemporalAdjusters.firstDayOfMonth());
+        // 这个月的最后一天 2022-02-28
+        localDate.with(TemporalAdjusters.lastDayOfMonth());
+        // 下个月的第一天 2022-03-01
+        localDate.with(TemporalAdjusters.firstDayOfNextMonth());
+        // 这一年的第一天 2022-01-01
+        localDate.with(TemporalAdjusters.firstDayOfYear());
+        // 这一年的最后一天 2022-12-31
+        localDate.with(TemporalAdjusters.lastDayOfYear());
+        // 下一年的第一天 2022-01-01
+        localDate.with(TemporalAdjusters.firstDayOfNextYear());
+        // 这个月的第一个星期一 2022-02-04
+        localDate.with(TemporalAdjusters.firstInMonth(DayOfWeek.MONDAY));
+        // 这个月的最后一个星期一 2022-02-25
+        localDate.with(TemporalAdjusters.lastInMonth(DayOfWeek.MONDAY));
+        // 这个月的第二个星期一 2022-02-11
+        localDate.with(TemporalAdjusters.dayOfWeekInMonth(2, DayOfWeek.MONDAY));
+        // 这个月的倒数第二个星期一 2022-02-18
+        localDate.with(TemporalAdjusters.dayOfWeekInMonth(-2, DayOfWeek.MONDAY));
+        // 下一个星期六 2022-02-16
+        localDate.with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
+        // 下一个星期六，可以是当天 2022-02-09
+        localDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
+        // 上一个星期六 2022-02-02
+        localDate.with(TemporalAdjusters.previous(DayOfWeek.SATURDAY));
+        // 上一个星期六，可以是当天 2022-02-09
+        localDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SATURDAY));
+
+    }
+    
+    @Test
+    public void getFormat(){
+        // 指定日期时间
+        ZonedDateTime zonedDateTime = ZonedDateTime.now();
+        // 2022-03-25 22:29:33
+        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(zonedDateTime);
+        // 2022-03-25 等同于DateTimeFormatter.ISO_LOCAL_DATE
+        DateTimeFormatter.ofPattern("yyyy-MM-dd").format(zonedDateTime);
+        // 2022年03月25日 22时29分33秒
+        DateTimeFormatter.ofPattern("yyyy年MM月dd日 HH时mm分ss秒").format(zonedDateTime);
+        // 2022年03月25日
+        DateTimeFormatter.ofPattern("yyyy年MM月dd日").format(zonedDateTime);
+        // 2022-03
+        DateTimeFormatter.ofPattern("yyyy-MM").format(zonedDateTime);
+        // 2022年03月
+        DateTimeFormatter.ofPattern("yyyy年MM月").format(zonedDateTime);
+        // 20220325
+        DateTimeFormatter.ofPattern("yyyyMMdd").format(zonedDateTime);
+        // 202203
+        DateTimeFormatter.ofPattern("yyyyMM").format(zonedDateTime);
+
+        //以下是格式化的一些标准提供格式
+        // ISO_LOCAL_DATE 2022-03-25
+        DateTimeFormatter.ISO_LOCAL_DATE.format(zonedDateTime);
+        // ISO_OFFSET_DATE 2022-03-25+08:00
+        DateTimeFormatter.ISO_OFFSET_DATE.format(zonedDateTime);
+        // ISO_DATE 2022-03-25+08:00
+        DateTimeFormatter.ISO_DATE.format(zonedDateTime);
+        // ISO_LOCAL_TIME 22:22:55.6747072
+        DateTimeFormatter.ISO_LOCAL_TIME.format(zonedDateTime);
+        // ISO_OFFSET_TIME 22:22:55.6747072+08:00
+        DateTimeFormatter.ISO_OFFSET_TIME.format(zonedDateTime);
+        // ISO_TIME 22:22:55.6747072+08:00
+        DateTimeFormatter.ISO_TIME.format(zonedDateTime);
+        // ISO_LOCAL_DATE_TIME 2022-03-25T22:22:55.6747072
+        DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(zonedDateTime);
+        // ISO_OFFSET_DATE_TIME 2022-03-25T22:22:55.6747072+08:00
+        DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(zonedDateTime);
+        // ISO_ZONED_DATE_TIME 2022-03-25T22:22:55.6747072+08:00[Asia/Shanghai]
+        DateTimeFormatter.ISO_ZONED_DATE_TIME.format(zonedDateTime);
+        // ISO_DATE_TIME 2022-03-25T22:22:55.6747072+08:00[Asia/Shanghai]
+        DateTimeFormatter.ISO_DATE_TIME.format(zonedDateTime);
+        // ISO_ORDINAL_DATE 2022-085+08:00
+        DateTimeFormatter.ISO_ORDINAL_DATE.format(zonedDateTime);
+        // ISO_WEEK_DATE 2022-W13-3+08:00
+        DateTimeFormatter.ISO_WEEK_DATE.format(zonedDateTime);
+        // ISO_INSTANT 2022-03-25T14:22:55.674707200Z
+        DateTimeFormatter.ISO_INSTANT.format(zonedDateTime);
+        // BASIC_ISO_DATE 20220325+0800
+        DateTimeFormatter.BASIC_ISO_DATE.format(zonedDateTime);
+        // RFC_1123_DATE_TIME Wed, 25 Mar 2022 22:22:55 +0800
+        DateTimeFormatter.RFC_1123_DATE_TIME.format(zonedDateTime);
+
+    }
+    
+    @Test
+    public void trans(){
+
+        LocalDate localDate = LocalDate.now();
+        Date date = DateUtils.asDate(localDate);
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Date date1 = DateUtils.asDate(localDateTime);
+
+        LocalDateTime localDateTime1 = LocalDateTime.of(2021, 8, 7, 22, 54, 12);
+        LocalDateTime localDateTime2 = LocalDateTime.now();
+
+        // 1
+        long year = localDateTime1.until(localDateTime2, ChronoUnit.YEARS);
+        // 12
+        long month = localDateTime1.until(localDateTime2, ChronoUnit.MONTHS);
+        // 365
+        long day = localDateTime1.until(localDateTime2, ChronoUnit.DAYS);
+        // 8760
+        long hour = localDateTime1.until(localDateTime2, ChronoUnit.HOURS);
+        // 525603
+        long minute = localDateTime1.until(localDateTime2, ChronoUnit.MINUTES);
+        // 31536183
+        long SECOND = localDateTime1.until(localDateTime2, ChronoUnit.SECONDS);
+
+        LocalDate startDate = LocalDate.of(2020, 2, 20);
+        LocalDate endDate = LocalDate.of(2021, 1, 15);
+        long years = ChronoUnit.YEARS.between(startDate, endDate);
+        long months = ChronoUnit.MONTHS.between(startDate, endDate);
+        long weeks = ChronoUnit.WEEKS.between(startDate, endDate);
+        long days = ChronoUnit.DAYS.between(startDate, endDate);
+        long hours = ChronoUnit.HOURS.between(startDate, endDate);
+        long minutes = ChronoUnit.MINUTES.between(startDate, endDate);
+        long seconds = ChronoUnit.SECONDS.between(startDate, endDate);
+        long milis = ChronoUnit.MILLIS.between(startDate, endDate);
+        long nano = ChronoUnit.NANOS.between(startDate, endDate);
+
+    }
+    
+    
 
 }
