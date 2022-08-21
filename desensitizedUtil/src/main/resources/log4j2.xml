@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <properties>
+        <!-- 文件输出格式 -->
+        <property name="PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} %5level --- [%t] %c : %msg%n</property>
+    </properties>
+
+    <appenders>
+        <!-- 日志打印到控制台Appender -->
+        <Console name="CONSOLE" target="system_out">
+            <MyLog4jPatternLayout pattern="${PATTERN}">
+                <!-- 日志字符集（默认UTF-8） -->
+                <charset>UTF-8</charset>
+                <!-- 开启脱敏（默认false） -->
+                <sensitive>true</sensitive>
+                <!-- 脱敏规则列表 -->
+                <replaces>
+                    <!-- 脱敏规则 -->
+                    <replace>
+                        <!-- 11位的手机号：保留前3后4 -->
+                        <regex>
+                            <![CDATA[
+            (mobile|手机号)(=|=\[|\":\"|:|：|='|':')(1)([3-9]{2})(\d{4})(\d{4})(\]|\"|'|)
+                        ]]>
+                        </regex>
+                        <replacement>$1$2$3$4****$6$7</replacement>
+                    </replace>
+                    <replace>
+                        <!-- 固定电话： XXXX-XXXXXXXX或XXX-XXXXXXXX，保留区号+前2后2 -->
+                        <regex>
+                            <![CDATA[
+            (tel|座机)(=|=\[|\":\"|:|：|='|':')([\d]{3,4}-)(\d{2})(\d{4})(\d{2})(\]|\"|'|)
+                        ]]>
+                        </regex>
+                        <replacement>$1$2$3$4****$6$7</replacement>
+                    </replace>
+
+                    <replace>
+                        <!-- 地址：汉字+字母+数字+下划线+中划线，留前3个汉字 -->
+                        <regex>
+                            <![CDATA[
+            (地址|住址|address)(=|=\[|\":\"|:|：|='|':')([\u4e00-\u9fa5]{3})(\w|[\u4e00-\u9fa5]|-)*(\]|\"|'|)
+                        ]]>
+                        </regex>
+                        <replacement>$1$2$3****$5</replacement>
+                    </replace>
+
+
+                    <replace>
+                        <!-- 19位的卡号，保留后4 -->
+                        <regex>
+                            <![CDATA[
+            (cardNo|卡号)(=|=\[|\":\"|:|：|='|':')(\d{15})(\d{4})(\]|\"|'|)
+                        ]]>
+                        </regex>
+                        <replacement>$1$2***************$4$5</replacement>
+                    </replace>
+
+                    <replace>
+                        <!-- 姓名,2-4汉字，留前1-->
+                        <regex>
+                            <![CDATA[
+            (name|姓名)(=|=\[|\":\"|:|：|='|':')([\u4e00-\u9fa5]{1})([\u4e00-\u9fa5]{1,3})(\]|\"|'|)
+                        ]]>
+                        </regex>
+                        <replacement>$1$2$3**$5</replacement>
+                    </replace>
+
+                    <replace>
+                        <!--  密码 6位数字，全* -->
+                        <regex>
+                            <![CDATA[
+                (password|密码|验证码)(=|=\[|\":\"|:|：|='|':')(\d{6})(\]|\"|'|)
+                        ]]>
+                        </regex>
+                        <replacement>$1$2******$4</replacement>
+                    </replace>
+
+                    <replace>
+                        <!-- 身份证，18位（结尾为数字或X、x），保留前1后1 -->
+                        <regex>
+                            <![CDATA[
+                        (身份证号|idCard)(=|=\[|\":\"|:|：|='|':')(\d{1})(\d{16})([\d|X|x]{1})(\]|\"|)
+                        ]]>
+                        </regex>
+                        <replacement>$1$2$3****************$5$6</replacement>
+                    </replace>
+
+                    <replace>
+                        <!-- 邮箱，保留@前的前1后1 -->
+                        <regex>
+                            <![CDATA[
+                        (\w{1})(\w*)(\w{1})@(\w+).com
+                        ]]>
+                        </regex>
+                        <replacement>$1****$3@$4.com</replacement>
+                    </replace>
+                </replaces>
+            </MyLog4jPatternLayout>
+        </Console>
+    </appenders>
+
+    <loggers>
+        <!-- 控制台输出 -->
+        <root level="info">
+            <AppenderRef ref="CONSOLE"/>
+        </root>
+    </loggers>
+
+</configuration>
